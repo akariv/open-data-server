@@ -14,17 +14,15 @@ class ReferenceFetcher(Processor):
         if type(obj) == dict and len(obj.keys())==1 and obj.has_key('_ref'):
             
             url = obj['_ref']
+            data = None
             try:
                 url = '/' + url
-                data = g.app.test_client().get(url).contents
-                print data.__dict__
+                data = g.app.test_client().get(url).data
                 data = json.loads(data)
                 if data != None:
                     return data
-                else:
-                    obj["exc"] = "blblb"
-            except Exception, e:
-                obj["exc"] = str(e)
+            except:
+                pass
             
         elif type(obj) == dict:
             return dict([ (k,self.handle_object(v)) for k,v in obj.iteritems()])
