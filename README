@@ -6,3 +6,22 @@ HaSadna: http://yeda.us
 
 Provides a frontend for accessing public data, either as API or as more complex web pages, with user/permission support etc.
 
+
+
+Getting started
+===============
+
+- Install mongodb
+- Install pymongo
+
+$ python run.py
+
+- Use the sadna-data project to load data from standard files into the DB 
+
+- Go to "http://127.0.0.1:5555/gov/knesset/mks"
+- Go to "http://127.0.0.1:5555/gov/knesset/mks?o=html"
+- Go to "http://127.0.0.1:5555/gov/knesset/mks?o=csv"
+- Go to "http://127.0.0.1:5555/gov/knesset/mks?lang=en"
+- Go to "http://127.0.0.1:5555/gov/knesset/mks/atias_ariel"
+- Go to "http://127.0.0.1:5555/gov/knesset/mks/atias_ariel?o=html"
+- Go to "http://127.0.0.1:5555/gov/knesset/mks/atias_ariel?o=html&lang=en"
