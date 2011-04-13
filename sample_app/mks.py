@@ -5,15 +5,13 @@ app = Flask(__name__)
 
 MKS_DB_URL = 'http://127.0.0.1:5555/mks/'
 
-@app.route("/")
-@dbserver(MKS_DB_URL)
+@dbserver(app,"/",MKS_DB_URL)
 def mk_list(data):
     return "\n".join( [ "<html><body>",
                         "\n".join( [ "<p><b>%(name)s</b>: %(age)s years old, lives in %(city)s</p>" % rec for rec in data ] ),
                         "</body></html>" ] ) 
 
-@app.route("/<slug>")
-@dbserver(MKS_DB_URL)
+@dbserver(app,"/<slug>",MKS_DB_URL)
 def mk_page(data):
     return """<html>
     <body>

@@ -5,6 +5,8 @@ from tok import Token
 
 PROCESSORS = [ "DataLoader",
                "DBOperation",
+               "ReferenceFetcher",
+               "MultiLang",
                "DataFormatter" ]
 
 def process(path,slug):
@@ -14,4 +16,4 @@ def process(path,slug):
         P = Processor.get_processor(name)
         P(token).process()
     
-    return token.response, token.content_type
+    return token.response, token.content_type, token.headers

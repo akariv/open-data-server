@@ -1,5 +1,3 @@
-import json
-
 from flask import abort
 
 from processor import Processor
@@ -7,7 +5,11 @@ from processors.emitters import Emitter
 
 from log import L
 
-EMITTERS = [ "JsonpFormatter",
+EMITTERS = [ "AppFormatter",
+             "CsvFormatter",
+             "ExcelFormatter",
+             "HtmlFormatter",
+             "JsonpFormatter",
              "JsonFormatter"]
 
 @Processor.processor

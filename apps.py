@@ -6,7 +6,7 @@ from flask import request, abort
 from urllib2 import urlopen,URLError,HTTPError
 
 # decorator for flask views
-def dbserver(api_url):
+def dbserver(app,route_info,api_url):
     def decorator(f):
         @wraps(f)
         def decorated_function(slug=""):
@@ -23,5 +23,5 @@ def dbserver(api_url):
                 data = json.loads(request.data)
                 return f(data)
             
-        return decorated_function
+        return app.route(route_info,methods=["GET","POST"])(decorated_function)
     return decorator

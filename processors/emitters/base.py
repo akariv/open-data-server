@@ -1,5 +1,3 @@
-import glob
-
 class Emitter(object):
     
     available_emitters = {}
