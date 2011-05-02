@@ -1,19 +1,20 @@
 from flask import Flask, g, request, Response
-from pymongo import Connection
+#from pymongo import Connection
+from couchdb import Server
 from process import process
 from log import L
+from processors.db_proxy import DB
 
 app = Flask(__name__)
 
 @app.before_request
 def before_request():
-    g.db_connection = Connection()
-    g.db = g.db_connection.hasadna.data
+    g.db = DB()
     g.app = app
 
 @app.after_request
 def after_request(response):
-    g.db_connection.end_request()
+    g.db.after_request()
     return response
 
 @app.route("/<path:path>/<slug>", methods=['GET', 'PUT', 'DELETE', 'POST'])

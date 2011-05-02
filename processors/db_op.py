@@ -9,7 +9,7 @@ from log import L
 @Processor.processor
 class DBOperation(Processor):
 
-    DATA_EL = '_'
+    DATA_EL = 'd'
     META_EL = 'm'
     PATH_EL = 'path'
     ID_EL   = 'id' 
@@ -51,7 +51,7 @@ class DBOperation(Processor):
                                  self.META_ID   : self.token.slug })
             if rec != None:
                 rec[self.DATA_EL] = self.token.data
-                g.db.save(rec,safe=True)
+                g.db.save(rec)
             self.token.response = True
         except:
             self.token.response = False
@@ -64,8 +64,7 @@ class DBOperation(Processor):
             if rec == None:
                 g.db.save( { self.META_EL : { self.PATH_EL : self.token.path,
                                               self.ID_EL   : self.token.slug },
-                             self.DATA_EL : self.token.data },
-                             safe = True)
+                             self.DATA_EL : self.token.data })
 
             self.token.response = True
         except:
@@ -76,11 +75,9 @@ class DBOperation(Processor):
         try:
             if self.token.slug != None:
                 g.db.remove({ self.META_PATH : self.token.path,
-                              self.META_ID   : self.token.slug },
-                              safe = True)
+                              self.META_ID   : self.token.slug })
             else:
-                g.db.remove({ self.META_PATH : self.token.path },
-                              safe = True)
+                g.db.remove({ self.META_PATH : self.token.path })
                 
             
             self.token.response = True
