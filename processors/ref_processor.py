@@ -16,7 +16,9 @@ class ReferenceFetcher(Processor):
             url = obj['_ref']
             data = None
             try:
-                url = '/' + url
+                url = '/' + url + "?follow=no"
+                if self.token.lang != None:
+                    url += "&lang=%s" % self.token.lang
                 data = g.app.test_client().get(url).data
                 data = json.loads(data)
                 if data != None:

@@ -8,6 +8,7 @@ class Token(object):
         self.response = ''
         self.content_type = ''
         self.headers = {}
+        self.lang = None
 
     def get_request_format(self):
         return self.request.args.get('o',None)

@@ -5,8 +5,8 @@ from tok import Token
 
 PROCESSORS = [ "DataLoader",
                "DBOperation",
-               "ReferenceFetcher",
                "MultiLang",
+               "ReferenceFetcher",
                "DataFormatter" ]
 
 def process(path,slug):

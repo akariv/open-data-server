@@ -36,4 +36,5 @@ class MultiLang(Processor):
     def process(self):
         self.preferred_langs = self.token.request.args.get('lang','').split(',')
         self.preferred_langs.extend(self.LANGS)
+        self.token.lang = self.preferred_langs[0]
         self.token.response = self.handle_object(self.token.response)
