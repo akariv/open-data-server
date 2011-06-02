@@ -203,7 +203,7 @@ $( function () {
 			query_str += "&limit="+encodeURI(limit);
 		} 
 
-		$("#url").html(DBSERVER + path + "?o=json" + query_str );
+		$("#url").attr("value",DBSERVER + path + "?o=json" + query_str );
 		
 		$.get( DBSERVER + path + "?o=json", 
 			   params,
@@ -290,7 +290,7 @@ $( function () {
 				</tr>
 			</table>
 		</form>
-		<label>URL:</label><span id="url"></span>
+		<label>URL:</label><textarea id="url"></textarea>
 		
 	</div>
 	<div id="catalog-query-results">
