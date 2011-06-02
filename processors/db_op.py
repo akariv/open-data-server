@@ -41,6 +41,7 @@ class DBOperation(Processor):
         if self.fields != None:
             self.fields = json.loads(self.fields)
             self.fields =[ "%s.%s" % (self.DATA_EL,k) for k in self.fields]
+            self.fields.append(self.META_EL)
 
         L.debug("DBOperation:: method=%r" % method)
         L.debug("DBOperation:: path=%r slug=%r data=%r" % (self.token.path, self.token.slug, self.token.data))

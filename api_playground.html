@@ -9,6 +9,7 @@
 	top:0%;
 	height:100%;
 	right:0%;
+	background:#eef;
 }
 
 #catalog-headers > .catalog > p {
@@ -34,6 +35,7 @@ table.fields td {
 	padding-right:3%;
 	overflow:auto;
 	border-bottom: 1px solid #888;
+	background:#fef;
 }
 
 .catalog {
@@ -66,13 +68,53 @@ table.fields td {
 	width:90%;
 	height:90%;
 	border:solid 2px black;
-	background:#fff; 
+	background:#cdf;
+	direction:ltr;
+}
+
+#catalog-query input, #catalog-query textarea {
+	direction:ltr;
+	width:100%;
 }
 
 #catalog-query-close {
 	position:absolute;
 	bottom:0px;
 	left:0px;
+}
+
+#catalog-query-params {
+	position:absolute;
+	height:100%;
+	width:40%;
+	top:0;
+	left:0;
+	border-left:1px solid #888;
+}
+
+#catalog-query-results {
+	position:absolute;
+	height:95%;
+	width:60%;
+	top:0;
+	left:40%;
+	border-bottom:1px solid #888;
+	overflow: auto;
+	direction:ltr;
+	background:#efe;
+}
+
+#catalog-query-results table {
+	border-collapse: collapse;
+}
+
+#catalog-query-results td {
+	border-right: 1px solid #ccc;
+}
+
+#catalog-query-results th {
+	border-right: 1px solid #ccc;
+	border-bottom: 2px solid #ccc;
 }
 
 </style>
@@ -125,10 +167,66 @@ $( function () {
 	} );
 	$(".catalog-link").live('click',function () {
 		$("#catalog-query").css("display","inherit");
-		$("input#path").attr("value",$(this).attr("rel"));
+   		$("#catalog-query-results").html("");
+		$("input#path").attr("value",$(this).attr("rel")+"/");
 	} );
 	$("#catalog-query-close").click( function () {
 		$("#catalog-query").css("display","none");
+	} );
+	$("#catalog-query-button").click( function () {
+		var path = $("#path").attr("value");
+		var params = {};
+		var fields = $("#fields").attr("value");
+		if ( fields != "" ) {
+			params["fields"] = fields;
+		} 
+		var query = $("#query").attr("value");
+		if ( query != "" ) {
+			params["query"] = query;
+		} 
+		var start = $("#start").attr("value");
+		if ( start != "" ) {
+			params["start"] = start;
+		} 
+		var limit = $("#limit").attr("value");
+		if ( limit != "" ) {
+			params["limit"] = limit;
+		} 
+		
+		$.get( DBSERVER + path + "?o=jsonp", 
+			   params,
+			   function ( data ) {
+			   	    var line0;
+			   	    var all_data;
+			   	 	if ( typeof(data["_src"]) == "undefined" ) {
+				   		line0 = data[0];
+				   		all_data = data;
+			   	 	} else {
+				   		line0 = data;
+				   		all_data = [ line0 ];
+			   	 	}
+			   		var fields = [];
+			   		$("#catalog-query-results").html("");
+					$("#catalog-query-results").append("<table><tr></tr></table>");
+					for ( var f in line0 ) {
+						fields[fields.length] = f;
+						$("#catalog-query-results tr").append("<th>"+f+"</th>");	
+					}
+					for ( var line_id in all_data ) {
+						var line = all_data[line_id];
+						$("#catalog-query-results table").append("<tr></tr>");
+						for ( var field_id in fields ) {
+							var field = fields[field_id];
+							var content = line[field];
+							if (typeof(content) == "object") {
+								$("#catalog-query-results tr:last").append("<td><pre>"+JSON.stringify(line[field])+"</pre></td>");
+							} else { 
+								$("#catalog-query-results tr:last").append("<td><pre>"+line[field]+"</pre></td>");
+							}
+						}
+					}			   		
+			   }, 
+			  "jsonp" );
 	} );
 } );
 </script>
@@ -142,39 +240,47 @@ $( function () {
 </div>
 
 <div id="catalog-query">
-	<form>
-		<table>
-			<tr>
-				<td colspan=2>
-					<label>path</label>
-					<input type="text" id="path"></input>
-				</td>
-			</tr>
-			<tr>
-				<td colspan=2>
-					<label>fields</label>
-					<input type="text" id="fields"></input>
-				</td>
-			</tr>
-			<tr>
-				<td colspan=2>
-					<label>query</label>
-					<textarea rows="5" id="query"></textarea>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<label>start</label>
-					<input type="text" id="start"></input>
-				</td>
-				<td>
-					<label>limit</label>
-					<input type="text" id="limit"></input>
-				</td>
-			</tr>
-		</table>
-		<input id="catalog-query-button" type="button" value="query!"></input>	
-	</form>
+	<div id="catalog-query-params">
+		<form>
+			<table>
+				<tr>
+					<td colspan=2>
+						<label>Path:</label>
+						<input type="text" id="path"></input>
+					</td>
+				</tr>
+				<tr>
+					<td colspan=2>
+						<label>Fields: (JSON list of strings)</label>
+						<input type="text" id="fields"></input>
+					</td>
+				</tr>
+				<tr>
+					<td colspan=2>
+						<label>Query: <a href="#" target="_blank">see here for format</a></label>
+						<textarea rows="10" cols="40" id="query"></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<label>Start Record: (number)</label>
+						<input type="text" id="start"></input>
+					</td>
+					<td>
+						<label>Record Limit: (number)</label>
+						<input type="text" id="limit"></input>
+					</td>
+				</tr>
+				<tr>
+					<td colspan=2>
+						<input id="catalog-query-button" type="button" value="query!"></input>	
+					</td>
+				</tr>
+			</table>
+		</form>
+		<label>URL:</label>
+		
+	</div>
 	<div id="catalog-query-results">
 	</div>
 	<div id='catalog-query-close'><a href="#">סגור</a></div>

@@ -53,8 +53,8 @@ class PermissionChecker(Processor):
         
         perms = set()
         
-        for i in range(len(fullpath),0,-1):
-            partial_path = fullpath[0:i]
+        for i in range(len(fullpath)):
+            partial_path = fullpath[0:i+1]
             L.debug("PermissionChecker: partial_path=%r" % partial_path)
             spec = json.dumps({ "ref" : "/" + "/".join(partial_path) })
             params = [('query',spec),('apikey','admin')]
