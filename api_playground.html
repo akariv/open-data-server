@@ -173,34 +173,37 @@ $( function () {
 	$("#catalog-query-close").click( function () {
 		$("#catalog-query").css("display","none");
 	} );
+	var query_str = "";
 	$("#catalog-query-button").click( function () {
 		var path = $("#path").attr("value");
 		var params = {};
 		var fields = $("#fields").attr("value");
 		if ( fields != "" ) {
 			params["fields"] = fields;
+			query_str += "&fields="+escapeURI(fields);
 		} 
 		var query = $("#query").attr("value");
 		if ( query != "" ) {
 			params["query"] = query;
+			query_str += "&query="+escapeURI(query);
 		} 
 		var start = $("#start").attr("value");
 		if ( start != "" ) {
 			params["start"] = start;
+			query_str += "&start="+escapeURI(start);
 		} 
 		var limit = $("#limit").attr("value");
 		if ( limit != "" ) {
 			params["limit"] = limit;
+			query_str += "&limit="+escapeURI(limit);
 		} 
-		
-		$.get( DBSERVER + path, // + "?o=jsonp", 
+
+		$("#url").html(DBSERVER + path + "?o=json" + query_str );
+		$.get( DBSERVER + path + "?o=json", 
 			   params,
 			   function ( data, status, xhr ) {
 			   	    var line0;
 			   	    var all_data;
-			   	    if ( typeof xhr != "undefined" ) {
-			   	    	alert(xhr.responseXML.url);
-			   	    }
 			   	 	if ( typeof(data["_src"]) == "undefined" ) {
 				   		line0 = data[0];
 				   		all_data = data;
@@ -281,7 +284,7 @@ $( function () {
 				</tr>
 			</table>
 		</form>
-		<label>URL:</label>
+		<label>URL:</label><span id="url"></span>
 		
 	</div>
 	<div id="catalog-query-results">
