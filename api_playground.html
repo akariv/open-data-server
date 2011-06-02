@@ -1,0 +1,183 @@
+<html>
+<head>
+<style type="text/css">
+
+#catalog-headers {
+	position:absolute;
+	border-left: 1px solid #888;
+	width:30%;
+	top:0%;
+	height:100%;
+	right:0%;
+}
+
+#catalog-headers > .catalog > p {
+	font-size: 120%;
+} 
+
+table.fields {
+	border-collapse: collapse;
+}
+
+table.fields td {
+	border: 1px solid #888;
+	padding:1px 5px;
+}
+
+#catalog-descriptions {
+	position:absolute;
+	border: none;
+	width:67%;
+	top:0%;
+	height:100%;
+	right:30%;
+	padding-right:3%;
+	overflow:auto;
+	border-bottom: 1px solid #888;
+}
+
+.catalog {
+	padding-right:10px;
+	margin-right:10px;
+	margin-left:20px;
+	border-right:1px solid #888;
+}
+
+.catalog p:hover {
+	background-color: #eee;
+	cursor: pointer;
+}
+
+.catalog-desc {
+	display:none;
+}
+
+.catalog-desc.active {
+	display:block;
+}
+
+#catalog-query {
+	display:none;
+	position:absolute;
+	top:4%;
+	left:4%;
+	margin:0;
+	padding:0;
+	width:90%;
+	height:90%;
+	border:solid 2px black;
+	background:#fff; 
+}
+
+#catalog-query-close {
+	position:absolute;
+	bottom:0px;
+	left:0px;
+}
+
+</style>
+<script type="text/javascript" src="jquery-1.4.4.min.js"></script>
+<script type="text/javascript">
+var DBSERVER = 'http://127.0.0.1:5555'
+
+var to_describe = [ '/data' ];
+function describe() {
+
+	if ( to_describe.length > 0 ) {
+		var ref = to_describe.shift();
+		$.get( DBSERVER + ref + "?o=jsonp", function ( data ) {
+			var title = data.title;
+			$("div[id=head-"+ref+"]").append("<p class='catalog-header' rel='"+ref+"'>"+title+"</p>");
+			$("div[id=catalog-descriptions]").append("<div class='catalog-desc' id='catalog-desc-"+ref+"'></div>");
+			$("div[id=catalog-desc-"+ref+"]").append("<ul><li><b>כותרת: </b>"+data.title+"</li><li><b>עורך: </b>"+data.author+"</li><li><b>תאריך עדכון אחרון: </b>"+data.update_date+"</li></ul>");
+			if ( data['subcatalogs'] != undefined ) {
+				for ( var c in data['subcatalogs'] ) {
+					var newref = ref + "/" + data['subcatalogs'][c]
+					to_describe.push( newref  );
+					$("div[id=head-"+ref+"]").append("<div class='catalog' id='head-"+newref+"'></div>");
+				}
+			}
+			if ( data['fields'] != undefined ) {
+				$("div[id=catalog-desc-"+ref+"] ul").append("<li><b>שדות:</b><table class='fields'></table></li>");
+				$("div[id=catalog-desc-"+ref+"] table.fields").append("<tr><th>שם השדה</th><th>טיפוס</th><th>תיאור השדה</th></tr>");
+				for ( var fieldname in data['fields'] ) {
+					var field = data['fields'][fieldname];
+					if ( field.type != 'slug' ) {
+						$("div[id=catalog-desc-"+ref+"] table.fields").append("<tr><td>"+fieldname+"</td><td>"+field.type+"</td><td>"+field.description+"</td></tr>");
+					}
+				}
+				$("div[id=catalog-desc-"+ref+"] ul").append("<li><a class='catalog-link' href='#' rel='"+ref+"'>לחץ כאן לביצוע שליפה על המידע</a></li>");
+			}
+			describe();
+		}, 
+		"jsonp" );
+	}
+}
+
+$( function () {
+	describe();	
+	$(".catalog-header").live('click',function () {
+		var ref = $(this).attr("rel");
+		$(".catalog-desc").removeClass("active");
+		var div_id = "div[id=catalog-desc-"+ref+"]"; 
+		$(div_id).toggleClass("active",true);
+		/*$("#catalog-details").html("<iframe src='"+DBSERVER+ref+"/?o=html&limit=10'></iframe>");*/
+	} );
+	$(".catalog-link").live('click',function () {
+		$("#catalog-query").css("display","inherit");
+		$("input#path").attr("value",$(this).attr("rel"));
+	} );
+	$("#catalog-query-close").click( function () {
+		$("#catalog-query").css("display","none");
+	} );
+} );
+</script>
+</head>
+<body dir="rtl">
+<div id="catalog-headers">
+	<div class='catalog' id="head-/data">
+	</div>
+</div>
+<div id="catalog-descriptions">
+</div>
+
+<div id="catalog-query">
+	<form>
+		<table>
+			<tr>
+				<td colspan=2>
+					<label>path</label>
+					<input type="text" id="path"></input>
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					<label>fields</label>
+					<input type="text" id="fields"></input>
+				</td>
+			</tr>
+			<tr>
+				<td colspan=2>
+					<label>query</label>
+					<textarea rows="5" id="query"></textarea>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>start</label>
+					<input type="text" id="start"></input>
+				</td>
+				<td>
+					<label>limit</label>
+					<input type="text" id="limit"></input>
+				</td>
+			</tr>
+		</table>
+		<input id="catalog-query-button" type="button" value="query!"></input>	
+	</form>
+	<div id="catalog-query-results">
+	</div>
+	<div id='catalog-query-close'><a href="#">סגור</a></div>
+</div>
+</body>
+</html>
