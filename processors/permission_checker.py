@@ -5,7 +5,7 @@ from flask import g
 from processor import Processor
 
 from log import L
-from django.utils.http import urlencode
+from urllib import urlencode
 import os
 
 @Processor.processor
