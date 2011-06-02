@@ -193,11 +193,14 @@ $( function () {
 			params["limit"] = limit;
 		} 
 		
-		$.get( DBSERVER + path + "?o=jsonp", 
+		$.get( DBSERVER + path, // + "?o=jsonp", 
 			   params,
-			   function ( data ) {
+			   function ( data, status, xhr ) {
 			   	    var line0;
 			   	    var all_data;
+			   	    if ( typeof xhr != "undefined" ) {
+			   	    	alert(xhr.responseXML.url);
+			   	    }
 			   	 	if ( typeof(data["_src"]) == "undefined" ) {
 				   		line0 = data[0];
 				   		all_data = data;
@@ -226,7 +229,7 @@ $( function () {
 						}
 					}			   		
 			   }, 
-			  "jsonp" );
+			  "json" );
 	} );
 } );
 </script>
