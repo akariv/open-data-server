@@ -7,6 +7,9 @@ class Processor(object):
     def process(self):
         assert(False)
 
+    def stop(self):
+        return False 
+
     available_processors = {}
 
     @classmethod

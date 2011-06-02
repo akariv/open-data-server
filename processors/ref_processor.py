@@ -14,6 +14,9 @@ class ReferenceFetcher(Processor):
         if type(obj) == dict and len(obj.keys())==1 and obj.has_key('_ref'):
             
             url = obj['_ref']
+            if url.strip() == '':
+                return None
+            
             data = None
             try:
                 url = '/' + url + "?follow=no"

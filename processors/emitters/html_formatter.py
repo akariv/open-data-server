@@ -14,15 +14,19 @@ class HtmlFormatter(Emitter):
             out.write("<table border='1'>")
             fields = set()
             for rec in obj:
-                fields.update(rec.keys())
+                if type(rec) == dict:
+                    fields.update(rec.keys())
             fields = list(fields)
             out.write('<tr><th>')
             out.write(u'</th><th>'.join(fields))
             out.write('</th></tr>')
             for rec in obj:
                 out.write('<tr><td>')
-                out.write('</td><td>'.join([self.html_for_obj(rec.get(f,'')) for f in fields]))
-                out.write('</th></tr>')
+                if type(rec) == dict:
+                    out.write('</td><td>'.join([self.html_for_obj(rec.get(f,'')) for f in fields]))
+                else:
+                    out.write(self.html_for_obj(rec))
+                out.write('</th></tr>')                
             out.write("</table>")
 
         elif type(obj) == dict:

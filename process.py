@@ -4,6 +4,7 @@ from processors import Processor
 from tok import Token
 
 PROCESSORS = [ "DataLoader",
+               "PermissionChecker",
                "DBOperation",
                "MultiLang",
                "ReferenceFetcher",
@@ -14,6 +15,9 @@ def process(path,slug):
     
     for name in PROCESSORS:
         P = Processor.get_processor(name)
-        P(token).process()
+        processor = P(token) 
+        processor.process()
+        if processor.stop():
+            break
     
     return token.response, token.content_type, token.headers

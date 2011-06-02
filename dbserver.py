@@ -1,9 +1,8 @@
 from flask import Flask, g, request, Response
 #from pymongo import Connection
-from couchdb import Server
 from process import process
 from log import L
-from processors.db_proxy import DB
+from processors.mongodb_proxy import DB
 
 app = Flask(__name__)
 
@@ -16,6 +15,13 @@ def before_request():
 def after_request(response):
     g.db.after_request()
     return response
+
+@app.route("/<slug>", methods=['GET', 'PUT', 'DELETE', 'POST'])
+def data(slug):
+    path=''
+    L.info("dbserver::data::%s:%s, %s, %s" % (request.method,path,slug,request.url))
+    response, content_type, headers = process(path,slug)
+    return Response(response=response, content_type=content_type, headers=headers)
 
 @app.route("/<path:path>/<slug>", methods=['GET', 'PUT', 'DELETE', 'POST'])
 def slug(path,slug):
