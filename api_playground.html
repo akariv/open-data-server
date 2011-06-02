@@ -180,25 +180,26 @@ $( function () {
 		var fields = $("#fields").attr("value");
 		if ( fields != "" ) {
 			params["fields"] = fields;
-			query_str += "&fields="+escapeURI(fields);
+			query_str += "&fields="+encodeURI(fields);
 		} 
 		var query = $("#query").attr("value");
 		if ( query != "" ) {
 			params["query"] = query;
-			query_str += "&query="+escapeURI(query);
+			query_str += "&query="+encodeURI(query);
 		} 
 		var start = $("#start").attr("value");
 		if ( start != "" ) {
 			params["start"] = start;
-			query_str += "&start="+escapeURI(start);
+			query_str += "&start="+encodeURI(start);
 		} 
 		var limit = $("#limit").attr("value");
 		if ( limit != "" ) {
 			params["limit"] = limit;
-			query_str += "&limit="+escapeURI(limit);
+			query_str += "&limit="+encodeURI(limit);
 		} 
 
 		$("#url").html(DBSERVER + path + "?o=json" + query_str );
+		
 		$.get( DBSERVER + path + "?o=json", 
 			   params,
 			   function ( data, status, xhr ) {
