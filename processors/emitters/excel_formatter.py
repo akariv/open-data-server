@@ -18,6 +18,7 @@ class ExcelFormatter(Emitter):
         out = StringIO()
         writer = csv.DictWriter(out,list(fields))
         writer.writerow(dict(zip(fields,fields)))
-        writer.writerows(self.token.response)
+        rows = [ dict([ (k,unicode(v).encode('utf8')) for k,v in row.iteritems() ]) for row in self.token.response ]
+        writer.writerows(rows)
         self.token.response = out.getvalue()
         self.token.headers['content-disposition'] = 'attachment; filename=data.xls' 

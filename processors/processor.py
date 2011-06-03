@@ -3,12 +3,17 @@ class Processor(object):
     
     def __init__(self,token):
         self.token = token
+        self.should_stop = False
+        self.skip_to = "XXX"
 
     def process(self):
         assert(False)
 
     def stop(self):
-        return False 
+        return self.should_stop 
+
+    def skip(self):
+        return self.skip_to 
 
     available_processors = {}
 

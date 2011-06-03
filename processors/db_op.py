@@ -58,14 +58,10 @@ class DBOperation(Processor):
         if self.token.slug != None:
             query = [ self.token.path, self.token.slug ]
             key = [ query ]
-            ret = hit_cache(key)
-            if ret == None:
-                rec = g.db.find_one( {self.META_PATH : self.token.path,
-                                      self.META_ID   : self.token.slug } )
-                if rec != None:
-                    ret = get_data(rec)
-                if ret != None:
-                    store_in_cache(key, ret)
+            rec = g.db.find_one( {self.META_PATH : self.token.path,
+                                  self.META_ID   : self.token.slug } )
+            if rec != None:
+                ret = get_data(rec)
             self.token.response = ret
         else:
             if self.query != None:
@@ -77,12 +73,9 @@ class DBOperation(Processor):
                     self.limit,
                     self.start ]
             L.debug("DBOperation:: find using query=%r" % self.query)
-            ret = hit_cache(key)
-            if ret == None:
-                recs = g.db.find(self.query,fields=self.fields,limit=self.limit,start=self.start)
-                recs = [ get_data(rec) for rec in recs ]
-                store_in_cache(key, recs)
-                ret = recs
+            recs = g.db.find(self.query,fields=self.fields,limit=self.limit,start=self.start)
+            recs = [ get_data(rec) for rec in recs ]
+            ret = recs
             self.token.response = ret
             
     def put(self):
@@ -105,7 +98,10 @@ class DBOperation(Processor):
                 g.db.save( { self.META_EL : { self.PATH_EL : self.token.path,
                                               self.ID_EL   : self.token.slug },
                              self.DATA_EL : self.token.data })
-
+            else:
+                rec[self.DATA_EL] = self.token.data
+                g.db.save(rec)
+                
             self.token.response = True
         except:
             L.exception('db_op::post')

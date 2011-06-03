@@ -1,4 +1,4 @@
-from couchdb import Server
+#from couchdb import Server
 import json
 
 class DB(object):

@@ -7,6 +7,7 @@ from processor import Processor
 from log import L
 from urllib import urlencode
 import os
+from hashlib import md5
 
 @Processor.processor
 class PermissionChecker(Processor):
@@ -15,7 +16,20 @@ class PermissionChecker(Processor):
         return self.should_stop
 
     def validate_api(self,api_key):
-        return False ## TODO
+        try:
+            L.info('PermissionChecker:: api_key = %s' % api_key)
+            api_key = api_key.decode('base64')
+            api_key = json.loads(api_key)
+            app = api_key['a']
+            referrer = api_key['r']
+            request_referrer = self.token.request.referrer
+            L.info('PermissionChecker:: app = %s, referrer = %s, req.referrer = %s' % (app, referrer, request_referrer))
+            assert( referrer == request_referrer )
+            secret = api_key['s']
+            assert( secret == md5().update("%s:%s:p4tpp" % (app,referrer)).hexdigest()[:8] )
+            self.app = "%s@%s" % (app,referrer)
+        except:
+            return False 
     
     def match_auth(self,auth):
         if auth.get('anonymous',False):
