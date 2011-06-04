@@ -1,6 +1,10 @@
 import json
 cache = {}
 
+def clear_cache(key):
+    if key in cache.keys():
+        del cache[key]
+
 def hit_cache(key):
     key = json.dumps(key)
     value = cache.get(key)
