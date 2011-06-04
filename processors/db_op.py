@@ -56,8 +56,6 @@ class DBOperation(Processor):
             return x
         
         if self.token.slug != None:
-            query = [ self.token.path, self.token.slug ]
-            key = [ query ]
             rec = g.db.find_one( {self.META_PATH : self.token.path,
                                   self.META_ID   : self.token.slug } )
             if rec != None:
@@ -68,10 +66,6 @@ class DBOperation(Processor):
                 self.query.update({self.META_PATH : self.token.path })
             else:
                 self.query = {self.META_PATH : self.token.path }
-            key = [ self.query,
-                    self.fields,
-                    self.limit,
-                    self.start ]
             L.debug("DBOperation:: find using query=%r" % self.query)
             recs = g.db.find(self.query,fields=self.fields,limit=self.limit,start=self.start)
             recs = [ get_data(rec) for rec in recs ]

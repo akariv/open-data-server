@@ -8,6 +8,7 @@ from log import L
 from urllib import urlencode
 import os
 from hashlib import md5
+import urlparse
 
 @Processor.processor
 class PermissionChecker(Processor):
@@ -23,6 +24,7 @@ class PermissionChecker(Processor):
             app = api_key['a']
             referrer = api_key['r']
             request_referrer = self.token.request.referrer
+            request_referrer = urlparse.urlparse(request_referrer).netloc
             L.info('PermissionChecker:: app = %s, referrer = %s, req.referrer = %s' % (app, referrer, request_referrer))
             assert( referrer == request_referrer )
             secret = api_key['s']
