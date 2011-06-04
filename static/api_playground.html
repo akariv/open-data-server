@@ -10,6 +10,7 @@
 	height:100%;
 	right:0%;
 	background:#eef;
+	overflow:auto;
 }
 
 #catalog-headers > .catalog > p {
@@ -125,8 +126,8 @@ textarea#url {
 </style>
 <script type="text/javascript" src="jquery-1.4.4.min.js"></script>
 <script type="text/javascript">
-var DBSERVER = 'http://api.yeda.us'
-//var DBSERVER = 'http://127.0.0.1:5555'
+//var DBSERVER = 'http://api.yeda.us'
+var DBSERVER = 'http://127.0.0.1:5555'
 
 var to_describe = [ '/data' ];
 function describe() {
@@ -204,7 +205,7 @@ $( function () {
 			query_str += "&limit="+encodeURI(limit);
 		} 
 
-		$("#url").attr("value",DBSERVER + path + "?o=jsonp" + query_str );
+		$("#url").attr("value",DBSERVER + path + "?o=json" + query_str );
 		
 		$.get( DBSERVER + path + "?o=jsonp", 
 			   params,
