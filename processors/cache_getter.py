@@ -5,7 +5,8 @@ from flask import g
 from log import L
 
 from processor import Processor
-from processors.cache_checker import hit_cache, clear_cache
+from processors.cache_checker import hit_cache, clear_cache,\
+    clear_cache_for_path
 
 @Processor.processor
 class CacheGetter(Processor):
@@ -24,3 +25,4 @@ class CacheGetter(Processor):
                 self.skip_to = "DataFormatter"
         else:
             clear_cache(self.token.cache_key)
+            clear_cache_for_path(self.token.path)

@@ -4,7 +4,7 @@ from processors import Processor
 from tok import Token
 
 PROCESSORS = [ "DataLoader",
-               "PermissionChecker",
+#               "PermissionChecker",
                "CacheGetter",
                "DBOperation",
                "MultiLang",

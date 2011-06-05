@@ -5,6 +5,7 @@ from flask import g
 from log import L
 
 from processor import Processor
+from internal_db_ops import internal_find
 
 @Processor.processor
 class ReferenceFetcher(Processor):
@@ -19,11 +20,7 @@ class ReferenceFetcher(Processor):
             
             data = None
             try:
-                url = '/' + url + "?follow=no"
-                if self.token.lang != None:
-                    url += "&lang=%s" % self.token.lang
-                data = g.app.test_client().get(url).data
-                data = json.loads(data)
+                data = internal_find(url,obj,follow=False,lang=self.token.lang)
                 if data != None:
                     return data
             except:

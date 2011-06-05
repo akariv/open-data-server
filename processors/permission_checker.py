@@ -1,14 +1,16 @@
+import os
 import json
+
+from hashlib import md5
+import urlparse
 
 from flask import g
 
+from log import L
+
 from processor import Processor
 
-from log import L
-from urllib import urlencode
-import os
-from hashlib import md5
-import urlparse
+from internal_db_ops import internal_find
 
 @Processor.processor
 class PermissionChecker(Processor):
@@ -73,15 +75,12 @@ class PermissionChecker(Processor):
             partial_path = fullpath[0:i+1]
             L.debug("PermissionChecker: partial_path=%r" % partial_path)
             spec = json.dumps({ "ref" : "/" + "/".join(partial_path) })
-            params = [('query',spec),('apikey','admin')]
-            params = urlencode(params)
-            data = g.app.test_client().get('/data/admin/permissions/?%s' % params).data
-            data = json.loads(data)
+            data = internal_find('/data/admin/permissions/',query=spec,apikey='admin')
             for rec in data:
                 auth = rec.get('auth')
                 if self.match_auth(auth):
                     perms.update(set(rec.get('perms',set())))
-                    L.info("PermissionChecker: rule %s, perms=%r" % (rec.get('_src'),set(rec.get('perm',set()))))
+                    L.info("PermissionChecker: rule %s, perms=%r" % (rec.get('_src'),set(rec.get('perms',set()))))
         
         if ( (method == "POST"   and "new"    in perms) or
              (method == "DELETE" and "delete" in perms) or

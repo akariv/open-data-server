@@ -1,3 +1,6 @@
+import os
+os.environ["DJANGO_SETTINGS_MODULE"]="openid_db.settings"
+
 from gevent import monkey; monkey.patch_all()
 from gevent.pywsgi import WSGIServer
 from dbserver import app

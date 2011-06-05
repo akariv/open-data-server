@@ -5,6 +5,7 @@ from process import process
 from log import L
 from processors.mongodb_proxy import DB
 from flask.helpers import url_for
+from internal_db_ops import internal_find, internal_save
 
 app = Flask(__name__)
 app.config.update(
@@ -18,7 +19,10 @@ def before_request():
     g.app = app
     g.user = None
     if 'openid' in session:
-        g.user = session['openid']
+        openid_key = session['openid'].encode('hex')
+        user = internal_find('/data/admin/users/%s' % openid_key)
+        if user != None:
+            g.user = user
 
 @app.after_request
 def after_request(response):
@@ -33,17 +37,22 @@ def login():
     if request.method == 'POST':
         openid = request.form.get('openid')
         if openid:
-            return oid.try_login(openid, ask_for=['email', 'fullname',
-                                                  'nickname'])
+            return oid.try_login(openid, ask_for=[ 'email', 'fullname', ] )
     return render_template('login.html', next=oid.get_next_url(),
                            error=oid.fetch_error())
 
 @oid.after_login
 def create_or_login(resp):
-    user = session['openid'] = resp.identity_url
-    L.info(u'Successfully signed in %s, %r' % (user, request.values))
-    L.info(u'Successfully signed in %s, %s' % (request.values.name, request.values.email))
-    g.user = user
+    session['openid'] = resp.identity_url
+    user = internal_find('/data/admin/users/%s' % resp.identity_url.encode('hex'))
+    if user != None:
+        L.info(u'Successfully signed in fullname=%s, email=%s (%r)' % (resp.fullname, resp.email, resp.__dict__))
+    else:
+        data = { "fullname" : resp.fullname,
+                 "email"    : resp.email }
+        user = internal_save('/data/admin/users/%s' % resp.identity_url.encode('hex'), data)
+        L.info(u'Successfully created fullname=%s, email=%s (%r)' % (resp.fullname, resp.email, resp.__dict__))
+    g.user = user        
     return redirect(oid.get_next_url())
 #    return redirect(url_for('create_profile', next=oid.get_next_url(),
 #                            name=resp.fullname or resp.nickname,

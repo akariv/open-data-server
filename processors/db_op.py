@@ -60,6 +60,8 @@ class DBOperation(Processor):
                                   self.META_ID   : self.token.slug } )
             if rec != None:
                 ret = get_data(rec)
+            else:
+                ret = None
             self.token.response = ret
         else:
             if self.query != None:
