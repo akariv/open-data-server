@@ -9,7 +9,7 @@ class TemplateFormatter(Emitter):
     def condition(self):
         self.format = self.token.get_request_format()
         self.template_name = ("%s:" % self.format).split(':')[1]
-        return format.startswith('template')
+        return self.format.startswith('template')
     
     def format(self):
         self.token.content_type = 'text/html'
