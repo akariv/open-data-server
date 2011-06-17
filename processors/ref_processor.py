@@ -25,8 +25,8 @@ class ReferenceFetcher(Processor):
                 data = internal_find(url,obj,follow=False,lang=self.token.lang)
                 if data != None:
                     return data
-            except:
-                pass
+            except Exception,e :
+                L.exception("ReferenceFetcher: Failed to fetch %r" % obj)
             
         elif type(obj) == dict:
             return dict([ (k,self.handle_object(v)) for k,v in obj.iteritems()])
