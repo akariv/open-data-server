@@ -14,6 +14,8 @@ class ReferenceFetcher(Processor):
         
         if type(obj) == dict and len(obj.keys())==1 and obj.has_key('_ref'):
             
+            L.info("ReferenceFetcher: Attempting to fetch %r" % obj)
+            
             url = obj['_ref']
             if url.strip() == '':
                 return None

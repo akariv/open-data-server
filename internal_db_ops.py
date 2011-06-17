@@ -2,6 +2,7 @@ import json
 from urllib import urlencode
 
 from flask import g
+from log import L
 
 def internal_save(url,obj):
     data = json.dumps(obj)
@@ -13,6 +14,8 @@ def internal_find(url,follow=True,lang=None,query=None,apikey=None):
     if lang:    params['lang'] = lang
     if query:   params['query'] = query
     if apikey:  params['apikey'] = apikey
+    L.info("internal_find: Attempting to fetch %s with %s" % (url,params))
+    
     params = urlencode(params)
     url += "?" + params
     data = g.app.test_client().get(url).data
