@@ -140,7 +140,11 @@ function describe() {
 
 	if ( to_describe.length > 0 ) {
 		var ref = to_describe.shift();
-		$.get( DBSERVER + ref + "?o=jsonp&apikey=eyJhIjogImFwaV9wbGF5Z3JvdW5kIiwgInMiOiAiODZiOGUxNzkiLCAiciI6ICJsb2NhbGhvc3Qi%0AfQ%3D%3D", function ( data ) {
+		$.get( DBSERVER + ref, 
+		{ o      : "jsonp",
+		  apikey : "eyJhIjogImFwaV9wbGF5Z3JvdW5kIiwgInMiOiAiODZiOGUxNzkiLCAiciI6ICJsb2NhbGhvc3Qi%0AfQ%3D%3D", 
+		  fields : [ "title", "subcatalogs", "update_date", "author" ] },
+		function ( data ) {
 			var title = data.title;
 			$("div[id=head-"+ref+"]").append("<p class='catalog-header' rel='"+ref+"'>"+title+"</p>");
 			$("div[id=catalog-descriptions]").append("<div class='catalog-desc' id='catalog-desc-"+ref+"'></div>");
