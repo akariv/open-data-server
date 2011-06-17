@@ -22,10 +22,10 @@ class ReferenceFetcher(Processor):
             
             data = None
             try:
-                data = internal_find(url,obj,follow=False,lang=self.token.lang)
+                data = internal_find(url,follow=False,lang=self.token.lang)
                 if data != None:
                     return data
-            except Exception,e :
+            except Exception:
                 L.exception("ReferenceFetcher: Failed to fetch %r" % obj)
             
         elif type(obj) == dict:
