@@ -10,7 +10,8 @@ EMITTERS = [ "AppFormatter",
              "ExcelFormatter",
              "HtmlFormatter",
              "JsonpFormatter",
-             "JsonFormatter"]
+             "JsonFormatter",
+             "TemplateFormatter"]
 
 @Processor.processor
 class DataFormatter(Processor):
