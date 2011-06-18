@@ -21,9 +21,5 @@ class TemplateFormatter(Emitter):
                 template = templates.get('list')
         else:
             template = templates.get('%s' % self.template_name)
-            
-        print "%%%% templates: %r" % templates
-        print "%%%% template: %r" % template
-        print "%%%% response: %r" % {"response":self.token.response}
-            
+                        
         self.token.response = pystache.render(template,response = self.token.response)
