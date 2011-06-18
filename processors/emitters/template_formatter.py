@@ -15,7 +15,7 @@ class TemplateFormatter(Emitter):
         self.token.content_type = 'text/html'
         templates = internal_find( self.token.path, fields=["templates"] ).get("templates",{})
         if self.template_name == "":
-            if self.token.slug == None:
+            if self.token.slug != None:
                 template = templates.get('detail')
             else: 
                 template = templates.get('list')
