@@ -11,7 +11,7 @@ app = Flask(__name__)
 app.config.update(
     SECRET_KEY = 'my-very-secretive-secret',
 )
-oid = OpenID(app,'/tmp/')
+oid = OpenID(app,'/tmp/',fallback_endpoint='http://api.yeda.us')
 
 @app.before_request
 def before_request():
