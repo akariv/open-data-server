@@ -6,7 +6,7 @@ class HtmlFormatter(Emitter):
     
     def condition(self):
         format = self.token.get_request_format()
-        return format == 'html'
+        return format == 'html' or format == None
     
     def html_for_obj(self,obj):
         out = StringIO()
@@ -43,7 +43,7 @@ class HtmlFormatter(Emitter):
     def format(self):
         self.token.content_type = 'text/html'
         out = StringIO()
-        out.write("<html><body>")
+        out.write("<html><meta http-equiv='Content-Type' content='text/html; charset=UTF-8'><body>")
         out.write(self.html_for_obj(self.token.response))
         out.write("</body></html>")
         self.token.response = out.getvalue()

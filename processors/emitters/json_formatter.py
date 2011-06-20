@@ -7,7 +7,7 @@ class JsonFormatter(Emitter):
     
     def condition(self):
         format = self.token.get_request_format()
-        return format == 'json' or format == None
+        return format == 'json'
     
     def format(self):
         self.token.content_type = 'application/json'
