@@ -36,6 +36,8 @@ class DBOperation(Processor):
         
         self.limit = self.token.request.args.get('limit',1000)
         self.limit = int(self.limit)
+        if self.limit == 0:
+            self.limit = None
 
         self.fields = self.token.request.args.get('fields')
         if self.fields != None:
