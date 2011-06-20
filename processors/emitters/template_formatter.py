@@ -8,7 +8,12 @@ class TemplateFormatter(Emitter):
     
     def condition(self):
         format = self.token.get_request_format()
-        templates = internal_find( self.token.path, fields=["templates"] ).get("templates",{})
+        if not (format.startswith('template') or format == None):
+            return False
+        try:
+            templates = internal_find( self.token.path, fields=["templates"] ).get("templates",{})
+        except:
+            return False
         self.template_name = ("%s:" % format).split(':')[1]
         if self.template_name == "":
             if self.token.slug != None:
@@ -17,7 +22,7 @@ class TemplateFormatter(Emitter):
                 self.template = templates.get('list')
         else:
             self.template = templates.get('%s' % self.template_name)
-        return (format.startswith('template') or format == None) and self.template != None 
+        return self.template != None 
     
     def format(self):
         self.token.content_type = 'text/html'                        
