@@ -8,18 +8,17 @@ class TemplateFormatter(Emitter):
     
     def condition(self):
         format = self.token.get_request_format()
-        self.template_name = ("%s:" % format).split(':')[1]
-        return format.startswith('template')
-    
-    def format(self):
-        self.token.content_type = 'text/html'
         templates = internal_find( self.token.path, fields=["templates"] ).get("templates",{})
+        self.template_name = ("%s:" % format).split(':')[1]
         if self.template_name == "":
             if self.token.slug != None:
-                template = templates.get('detail')
+                self.template = templates.get('detail')
             else: 
-                template = templates.get('list')
+                self.template = templates.get('list')
         else:
-            template = templates.get('%s' % self.template_name)
-                        
-        self.token.response = pystache.render(template,response = self.token.response)
+            self.template = templates.get('%s' % self.template_name)
+        return (format.startswith('template') or format == None) and self.template != None 
+    
+    def format(self):
+        self.token.content_type = 'text/html'                        
+        self.token.response = pystache.render(self.template,response = self.token.response)

@@ -5,14 +5,16 @@ from processors.emitters import Emitter
 
 from log import L
 
-EMITTERS = [ "AppFormatter",
+EMITTERS = [
+             "TemplateFormatter",
+             "StaticFileFormatter",
+             "HtmlFormatter",
+             "JsonFormatter",
+             "JsonpFormatter",
              "CsvFormatter",
              "ExcelFormatter",
-             "HtmlFormatter",
-             "JsonpFormatter",
-             "JsonFormatter",
-             "TemplateFormatter",
-             "StaticFileFormatter"]
+             "AppFormatter",
+           ]
 
 @Processor.processor
 class DataFormatter(Processor):
