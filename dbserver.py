@@ -44,13 +44,14 @@ def login():
 @oid.after_login
 def create_or_login(resp):
     session['openid'] = resp.identity_url
-    user = internal_find('/data/admin/users/%s' % resp.identity_url.encode('hex'))
+    openid_key = session['openid'].encode('hex')
+    user = internal_find('/data/admin/users/%s' % openid_key)
     if user != None:
         L.info(u'Successfully signed in fullname=%s, email=%s (%r)' % (resp.fullname, resp.email, resp.__dict__))
     else:
         data = { "fullname" : resp.fullname,
                  "email"    : resp.email }
-        user = internal_save('/data/admin/users/%s' % resp.identity_url.encode('hex'), data)
+        user = internal_save('/data/admin/users/%s' % openid_key, data)
         L.info(u'Successfully created fullname=%s, email=%s (%r)' % (resp.fullname, resp.email, resp.__dict__))
     g.user = user        
     return redirect(oid.get_next_url())
