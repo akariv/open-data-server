@@ -11,7 +11,8 @@ EMITTERS = [ "AppFormatter",
              "HtmlFormatter",
              "JsonpFormatter",
              "JsonFormatter",
-             "TemplateFormatter"]
+             "TemplateFormatter",
+             "StaticFileFormatter"]
 
 @Processor.processor
 class DataFormatter(Processor):
@@ -24,6 +25,11 @@ class DataFormatter(Processor):
             if e.condition():
                 L.debug("DataFormatter:: using emitter %s" % emitter)
                 e.format()
-                L.debug("DataFormatter:: token.response=%r (%s)" % (self.token.response,self.token.content_type))
-                return
-        abort(400)
+                break
+        else:
+            emitter = "HtmlFormatter"
+            E = Emitter.get_emitter(emitter)
+            e = E(self.token)
+            L.debug("DataFormatter:: using default emitter %s" % emitter)
+            e.format()
+        L.debug("DataFormatter:: token.response=%r (%s)" % (self.token.response,self.token.content_type))
