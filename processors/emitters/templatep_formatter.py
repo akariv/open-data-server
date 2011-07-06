@@ -9,7 +9,8 @@ class TemplatePFormatter(TemplateFormatter):
     
     def condition(self):
         self.callback = self.token.request.args.get('callback',None)
-        return super(TemplatePFormatter,self).condition() and self.callback != None
+        format = self.token.get_request_format()
+        return super(TemplatePFormatter,self).condition() and self.callback != None and format.startswith("templatep")
     
     def format(self):
         super(TemplatePFormatter,self).format()

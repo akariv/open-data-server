@@ -6,6 +6,7 @@ from processors.emitters import Emitter
 from log import L
 
 EMITTERS = [
+             "TemplatePFormatter",
              "TemplateFormatter",
              "StaticFileFormatter",
              "HtmlFormatter",
