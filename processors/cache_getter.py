@@ -19,7 +19,7 @@ class CacheGetter(Processor):
         self.token.cache_key = json.dumps(self.token.path) + '|' + json.dumps(self.token.slug) + '|' + '|'.join([ self.token.request.args.get(arg,'') for arg in self.ARGS_FOR_KEY ])
         if self.token.request.method == "GET":
             data = hit_cache(self.token.cache_key)
-            L.info("Data for key %s == %r" % (self.token.cache_key,data))
+            L.info("Data for key %s == %s" % (self.token.cache_key,repr(data)[:2048]))
             if data != None:
                 self.token.response = json.loads(data)
                 self.should_stop = True

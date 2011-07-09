@@ -16,6 +16,7 @@ class DBOperation(Processor):
     PATH_EL = 'path'
     ID_EL   = 'id' 
     SOURCE_EL   = '_src' 
+    SOURCE_SLUG_EL   = '_srcslug' 
     META_PATH = '.'.join([META_EL,PATH_EL])
     META_ID = '.'.join([META_EL,ID_EL])
         
@@ -52,7 +53,7 @@ class DBOperation(Processor):
         L.debug("DBOperation:: path=%r slug=%r data=%r" % (self.token.path, self.token.slug, self.token.data))
         if method in ['GET', 'PUT', 'POST', 'DELETE']:
             getattr(self,method.lower())()
-        L.debug("DBOperation:: result=%r" % self.token.response)
+        L.debug("DBOperation:: result=%s" % repr(self.token.response)[:2048])
         
     def get(self):
         def get_data(rec):
