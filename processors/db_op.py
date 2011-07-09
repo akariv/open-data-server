@@ -52,7 +52,7 @@ class DBOperation(Processor):
         L.debug("DBOperation:: path=%r slug=%r data=%r" % (self.token.path, self.token.slug, self.token.data))
         if method in ['GET', 'PUT', 'POST', 'DELETE']:
             getattr(self,method.lower())()
-        L.debug("DBOperation:: result=%r" % self.token.response)
+        L.debug("DBOperation:: result=%s" % repr(self.token.response)[:2048])
         
     def get(self):
         def get_data(rec):

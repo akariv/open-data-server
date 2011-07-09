@@ -35,4 +35,4 @@ class DataFormatter(Processor):
             e = E(self.token)
             L.debug("DataFormatter:: using default emitter %s" % emitter)
             e.format()
-        L.debug("DataFormatter:: token.response=%r (%s)" % (self.token.response,self.token.content_type))
+        L.debug("DataFormatter:: token.response=%s (%s)" % (repr(self.token.response)[:2048],self.token.content_type))
