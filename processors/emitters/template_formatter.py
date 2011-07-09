@@ -26,4 +26,6 @@ class TemplateFormatter(Emitter):
     
     def format(self):
         self.token.content_type = 'text/html'                        
-        self.token.response = pystache.render(self.template,response = self.token.response)
+        self.token.response = pystache.render( self.template,
+                                               response = self.token.response,
+                                               user     = self.token.user )

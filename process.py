@@ -1,4 +1,4 @@
-from flask import request
+from flask import request, g
 
 from processors import Processor
 from tok import Token
@@ -13,7 +13,7 @@ PROCESSORS = [ "DataLoader",
                "DataFormatter" ]
 
 def process(path,slug):
-    token = Token(request,path,slug)
+    token = Token(request,path,slug,g.user)
     
     to_skip = None
     for name in PROCESSORS:

@@ -49,8 +49,9 @@ def create_or_login(resp):
     if user != None:
         L.info(u'Successfully signed in fullname=%s, email=%s (%r)' % (resp.fullname, resp.email, resp.__dict__))
     else:
-        data = { "fullname" : resp.fullname,
-                 "email"    : resp.email }
+        data = { "fullname"     : resp.fullname,
+                 "email"        : resp.email,
+                 "key"          : openid_key }
         user = internal_save('/data/admin/users/%s' % openid_key, data)
         L.info(u'Successfully created fullname=%s, email=%s (%r)' % (resp.fullname, resp.email, resp.__dict__))
     g.user = user        
