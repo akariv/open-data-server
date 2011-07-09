@@ -87,5 +87,5 @@ def slug(path,slug):
 def noslug(path):
     L.info("dbserver::noslug::%s:%s, %s" % (request.method,path,request.url))
     response, content_type, headers = process(path,None)
-    L.info("%s %s %s" % (response, content_type, headers))
+    L.info("%s %s %s" % (str(response)[:2048], content_type, headers))
     return Response(response=response, content_type=content_type, headers=headers)
