@@ -45,6 +45,9 @@ class DBOperation(Processor):
             self.fields =[ "%s.%s" % (self.DATA_EL,k) for k in self.fields]
             self.fields.append(self.META_EL)
 
+        self.count = self.token.request.args.get('count',0)
+        self.count = int(self.count)
+
         L.debug("DBOperation:: method=%r" % method)
         L.debug("DBOperation:: path=%r slug=%r data=%r" % (self.token.path, self.token.slug, self.token.data))
         if method in ['GET', 'PUT', 'POST', 'DELETE']:
@@ -55,6 +58,7 @@ class DBOperation(Processor):
         def get_data(rec):
             x = rec.get(self.DATA_EL,{})
             x[self.SOURCE_EL] = "%s/%s" % (rec[self.META_EL][self.PATH_EL], rec[self.META_EL][self.ID_EL])
+            x[self.SOURCE_SLUG_EL] = x[self.SOURCE_EL].replace('/','__')
             return x
         
         if self.token.slug != None:
@@ -71,9 +75,12 @@ class DBOperation(Processor):
             else:
                 self.query = {self.META_PATH : self.token.path }
             L.debug("DBOperation:: find using query=%r" % self.query)
-            recs = g.db.find(self.query,fields=self.fields,limit=self.limit,start=self.start)
-            recs = [ get_data(rec) for rec in recs ]
-            ret = recs
+            if self.count == 0:
+                recs = g.db.find(self.query,fields=self.fields,limit=self.limit,start=self.start)
+                recs = [ get_data(rec) for rec in recs ]
+                ret = recs
+            else:
+                ret = g.db.count(self.query,fields=self.fields,limit=self.limit,start=self.start)
             self.token.response = ret
             
     def put(self):

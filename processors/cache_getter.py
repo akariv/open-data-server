@@ -12,7 +12,8 @@ from processors.cache_checker import hit_cache, clear_cache,\
 class CacheGetter(Processor):
 
     ARGS_FOR_KEY = [ 'lang', 'follow',
-                     'query', 'order', 'start', 'limit', 'fields']
+                     'query', 'order', 'start', 'limit', 'fields',
+                     'count' ]
     
     def process(self):
         self.token.cache_key = json.dumps(self.token.path) + '|' + json.dumps(self.token.slug) + '|' + '|'.join([ self.token.request.args.get(arg,'') for arg in self.ARGS_FOR_KEY ])
