@@ -4,7 +4,7 @@ from flask import g
 
 from processor import Processor
 
-from log import L
+from log import L, snip
 
 from cache_checker import hit_cache, store_in_cache
 
@@ -53,8 +53,8 @@ class DBOperation(Processor):
         L.debug("DBOperation:: path=%r slug=%r data=%r" % (self.token.path, self.token.slug, self.token.data))
         if method in ['GET', 'PUT', 'POST', 'DELETE']:
             getattr(self,method.lower())()
-        L.debug("DBOperation:: result=%s" % snip(repr(self.token.response))
-        
+        L.debug("DBOperation:: result=%s" % snip(repr(self.token.response)))
+
     def get(self):
         def get_data(rec):
             x = rec.get(self.DATA_EL,{})
