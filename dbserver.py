@@ -27,6 +27,7 @@ def before_request():
 @app.after_request
 def after_request(response):
     g.db.after_request()
+    response.headers["Access-Control-Allow-Origin"] = "*"
     return response
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -87,5 +88,5 @@ def slug(path,slug):
 def noslug(path):
     L.info("dbserver::noslug::%s:%s, %s" % (request.method,path,request.url))
     response, content_type, headers = process(path,None)
-    L.info("%s %s %s" % (str(response)[:2048], content_type, headers))
+    L.info("%s %s %s" % (str(response)[:128], content_type, headers))
     return Response(response=response, content_type=content_type, headers=headers)
