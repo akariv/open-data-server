@@ -2,7 +2,7 @@ from flask import Flask, g, request, Response, redirect, render_template, sessio
 from flaskext.openid import OpenID
 #from pymongo import Connection
 from process import process
-from log import L
+from log import L, snip
 from processors.mongodb_proxy import DB
 from flask.helpers import url_for
 from internal_db_ops import internal_find, internal_save
