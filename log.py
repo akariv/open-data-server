@@ -20,3 +20,8 @@ L = logging.getLogger("DBServer")
 L.setLevel(logging.DEBUG)
 sh.setLevel(logging.DEBUG)
 fh.setLevel(logging.DEBUG)
+
+def snip(s):
+    u = unicode(s)
+    u=u[:128]
+    return u.encode('utf8')
