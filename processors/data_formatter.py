@@ -3,7 +3,7 @@ from flask import abort
 from processor import Processor
 from processors.emitters import Emitter
 
-from log import L
+from log import L, snip
 
 EMITTERS = [
              "TemplatePFormatter",
@@ -35,4 +35,4 @@ class DataFormatter(Processor):
             e = E(self.token)
             L.debug("DataFormatter:: using default emitter %s" % emitter)
             e.format()
-        L.debug("DataFormatter:: token.response=%s (%s)" % (repr(self.token.response)[:128],self.token.content_type))
+        L.debug("DataFormatter:: token.response=%s (%s)" % (snip(repr(self.token.response)),self.token.content_type))
