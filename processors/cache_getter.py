@@ -17,7 +17,7 @@ class CacheGetter(Processor):
     
     def process(self):
         self.token.cache_key = json.dumps(self.token.path) + '|' + json.dumps(self.token.slug) + '|' + '|'.join([ self.token.request.args.get(arg,'') for arg in self.ARGS_FOR_KEY ])
-        if self.request.args.get('hitcache',1) == 0:
+        if self.token.request.args.get('hitcache',1) == 0:
             return 
         if self.token.request.method == "GET":
             data = hit_cache(self.token.cache_key)
