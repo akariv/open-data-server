@@ -18,10 +18,10 @@ $ python run.py
 
 - Use the sadna-data project to load data from standard files into the DB 
 
-- Go to "http://127.0.0.1:5555/gov/knesset/mks"
-- Go to "http://127.0.0.1:5555/gov/knesset/mks?o=html"
-- Go to "http://127.0.0.1:5555/gov/knesset/mks?o=csv"
-- Go to "http://127.0.0.1:5555/gov/knesset/mks?lang=en"
-- Go to "http://127.0.0.1:5555/gov/knesset/mks/atias_ariel"
-- Go to "http://127.0.0.1:5555/gov/knesset/mks/atias_ariel?o=html"
-- Go to "http://127.0.0.1:5555/gov/knesset/mks/atias_ariel?o=html&lang=en"
+- Go to "http://api.yeda.us/data/gov/knesset/mks"
+- Go to "http://api.yeda.us/data/gov/knesset/mks?o=html"
+- Go to "http://api.yeda.us/data/gov/knesset/mks?o=csv"
+- Go to "http://api.yeda.us/data/gov/knesset/mks?lang=en"
+- Go to "http://api.yeda.us/data/gov/knesset/mks/atias_ariel"
+- Go to "http://api.yeda.us/data/gov/knesset/mks/atias_ariel?o=html"
+- Go to "http://api.yeda.us/data/gov/knesset/mks/atias_ariel?o=html&lang=en"
