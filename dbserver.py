@@ -6,6 +6,7 @@ from log import L, snip
 from processors.mongodb_proxy import DB
 from flask.helpers import url_for
 from internal_db_ops import internal_find, internal_save
+import urllib
 
 app = Flask(__name__)
 app.config.update(
@@ -19,7 +20,7 @@ def before_request():
     g.app = app
     g.user = None
     if 'openid' in session:
-        openid_key = session['openid'].encode('hex')
+        openid_key = urllib.quote(session['openid'])
         user = internal_find('/data/admin/users/%s' % openid_key)
         if user != None:
             g.user = user
@@ -47,7 +48,7 @@ def login():
 @oid.after_login
 def create_or_login(resp):
     session['openid'] = resp.identity_url
-    openid_key = session['openid'].encode('hex')
+    openid_key = urllib.quote(session['openid'])
     user = internal_find('/data/admin/users/%s' % openid_key)
     if user != None:
         L.info(u'Successfully signed in fullname=%s, email=%s (%r)' % (resp.fullname, resp.email, resp.__dict__))
