@@ -7,6 +7,7 @@ from processor import Processor
 from log import L, snip
 
 from cache_checker import hit_cache, store_in_cache
+import uuid
 
 @Processor.processor
 class DBOperation(Processor):
@@ -96,6 +97,8 @@ class DBOperation(Processor):
             self.token.response = False
 
     def post(self):
+        if self.token.slug == None:
+            self.token.slug = uuid.uuid4()
         try:
             rec = g.db.find_one({self.META_PATH : self.token.path,
                                  self.META_ID   : self.token.slug })
@@ -108,7 +111,7 @@ class DBOperation(Processor):
                 rec[self.DATA_EL] = self.token.data
                 g.db.save(rec)
                 
-            self.token.response = True
+            self.token.response = True, self.token.path, self.token.slug
         except:
             L.exception('db_op::post')
             self.token.response = False
