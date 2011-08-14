@@ -13,5 +13,5 @@ class StaticFileFormatter(Emitter):
     def format(self):
         real_path = self.token.path[:-len(self.STATIC_SUFFIX)]
         statics = internal_find( real_path, fields=["static-files"] ).get("static-files",{})
-        self.token.content_type, self.token.response = statics.get(self.token.slug,("text/html",""))
+        self.token.content_type, self.token.response = statics.get(self.token.slug.replace('.','__'),("text/html",""))
         self.token.response = self.token.response.decode('base64')
