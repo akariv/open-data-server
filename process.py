@@ -11,7 +11,7 @@ PROCESSORS = [ "CacheGetter",
                "DataFormatter" ]
 
 def process(path,slug):
-    token = Token(request,path,slug,g.user)
+    token = Token(request,path,slug,None)
     
     to_skip = None
     for name in PROCESSORS:

@@ -132,7 +132,7 @@ textarea#url {
 </style>
 <script type="text/javascript" src="static/jquery-1.4.4.min.js"></script>
 <script type="text/javascript">
-//var DBSERVER = 'http://api.yeda.us'
+var DBSERVER = 'http://api.yeda.us'
 //var DBSERVER = 'http://127.0.0.1:5555'
 
 var to_describe = [ '/data' ];
@@ -308,14 +308,6 @@ $( function () {
 	<div id="catalog-query-results">
 	</div>
 	<div id='catalog-query-close'><a href="#">סגור</a></div>
-</div>
-
-<div id="page-header">
-  {% if g.user %}
-  Hello,  {{ g.user.fullname }} <a href="{{ url_for('logout') }}">sign out</a>
-  {% else %}
-  <a href="{{ url_for('login') }}">sign in</a>
-  {% endif %}
 </div>
 
 </body>

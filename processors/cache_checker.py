@@ -1,8 +1,8 @@
 import json
-from werkzeug.contrib.cache import SimpleCache as CacheEngine
-#from werkzeug.contrib.cache import MemcachedCache as CacheEngine
+#from werkzeug.contrib.cache import SimpleCache as CacheEngine
+from werkzeug.contrib.cache import MemcachedCache as CacheEngine
 
-cache = CacheEngine()
+cache = CacheEngine(['127.0.0.1:11211'])
 
 def clear_cache(key):
     cache.delete(key)
