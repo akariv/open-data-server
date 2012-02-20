@@ -52,7 +52,7 @@ class DBOperation(Processor):
 
         L.debug("DBOperation:: method=%r" % method)
         L.debug("DBOperation:: path=%r slug=%r data=%r" % (self.token.path, self.token.slug, self.token.data))
-        if method in ['GET', 'PUT', 'POST', 'DELETE']:
+        if method in ['GET']:#, 'PUT', 'POST', 'DELETE']:
             getattr(self,method.lower())()
         L.debug("DBOperation:: result=%s" % snip(repr(self.token.response)))
 
@@ -85,46 +85,3 @@ class DBOperation(Processor):
                 ret = g.db.count(self.query,fields=self.fields,limit=self.limit,start=self.start)
             self.token.response = ret
             
-    def put(self):
-        try:
-            rec = g.db.find_one({self.META_PATH : self.token.path,
-                                 self.META_ID   : self.token.slug })
-            if rec != None:
-                rec[self.DATA_EL] = self.token.data
-                g.db.save(rec)
-            self.token.response = True
-        except:
-            self.token.response = False
-
-    def post(self):
-        if self.token.slug == None:
-            self.token.slug = uuid.uuid4()
-        try:
-            rec = g.db.find_one({self.META_PATH : self.token.path,
-                                 self.META_ID   : self.token.slug })
-            
-            if rec == None:
-                g.db.save( { self.META_EL : { self.PATH_EL : self.token.path,
-                                              self.ID_EL   : self.token.slug },
-                             self.DATA_EL : self.token.data })
-            else:
-                rec[self.DATA_EL] = self.token.data
-                g.db.save(rec)
-                
-            self.token.response = True, self.token.path, self.token.slug
-        except:
-            L.exception('db_op::post')
-            self.token.response = False
-
-    def delete(self):
-        try:
-            if self.token.slug != None:
-                g.db.remove({ self.META_PATH : self.token.path,
-                              self.META_ID   : self.token.slug })
-            else:
-                g.db.remove({ self.META_PATH : self.token.path })
-                
-            
-            self.token.response = True
-        except:
-            self.token.response = False

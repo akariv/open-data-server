@@ -17,10 +17,10 @@ class DB(object):
         return self.find(*args,**kwargs).count()
 
     def save(self,doc):
-        self.db.save(doc,safe=True)
+        #self.db.save(doc,safe=True)
         
     def remove(self,query_dict):
-        self.db.remove(query_dict,safe=True)
+        #self.db.remove(query_dict,safe=True)
             
     def after_request(self):
         self.db_connection.end_request()
