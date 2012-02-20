@@ -3,9 +3,7 @@ from flask import request, g
 from processors import Processor
 from tok import Token
 
-PROCESSORS = [ "DataLoader",
-#               "PermissionChecker",
-               "CacheGetter",
+PROCESSORS = [ "CacheGetter",
                "DBOperation",
                "MultiLang",
                "ReferenceFetcher",
